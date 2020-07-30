@@ -1,0 +1,55 @@
+---
+ - name: Upgrade the Nodegrid
+   hosts: "{{ ipaddress }}"
+   gather_facts: no
+   vars_prompt:
+      - name: ipaddress
+        prompt: Enter the ip address or group name
+        private: no
+   vars:
+    ng_filename: Nodegrid_Platform_v4.2.1_20200626.iso
+    ng_full: /etc/ansible/Firmware/{{ ng_filename }}
+    ng_dest: /var/sw/{{ ng_filename }}
+    #    ng_version: "4.2.1"
+    file_name_upgrade: upgarde.cli
+    file_name_backup: backup.cli
+    become: true
+
+   tasks:
+   - name: Copy ISO to Nodegrid
+     copy:
+      src: "{{ ng_full }}"
+      dest: "{{ ng_dest }}"
+
+   - name: Copy firmware update script
+     template:
+      src: templates/4.0/nodegrid_upgrade.j2
+      dest: /tmp/{{ file_name_upgrade }}
+
+   - name: Run Firmware update
+     command : cli -f /tmp/{{ file_name_upgrade }}
+
+   - name: Wait 300 seconds for target connection to become reachable/usable
+     wait_for_connection:
+      delay: 60
+      timeout: 300
+
+   - name: Current Version
+     command : grep ^VERSION= /software
+     register: ng_version_after
+
+   - name: Upgrade Successful
+     debug:
+       msg: "Upgarde successful new version: {{ ng_version_after['stdout'] }}"
+
+   - name: Deleting Cache
+     wait_for_connection:
+       delay: 5
+       timeout: 10
+
+   - name: Find and Delete
+     shell: sudo rm -rf /var/sw/*
+
+   - name: ACK
+     debug:
+       msg: " Nodegird is up and running "   

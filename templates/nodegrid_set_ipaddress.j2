@@ -1,0 +1,15 @@
+cd /settings/network_connections/{{ ng_net_interface }}/
+set description={{ ng_net_description }}
+set connect_automatically={{ ng_net_connect_automatically }}
+set set_as_primary_connection={{ ng_net_set_as_primary_connection }}
+set enable_lldp={{ ng_net_enable_lldp }}
+set ipv4_mode={{ ng_net_ipv4_mode }}
+set ipv4_address={{ ng_net_ipv4_address }}
+set ipv4_bitmask={{ ng_net_ipv4_bitmask }}
+set ipv4_gateway={{ ng_net_ipv4_gateway }}
+set ipv4_dns_server={{ ng_net_ipv4_dns_server }}
+set ipv4_dns_search={{ ng_net_ipv4_dns_search }}
+set ipv6_mode={{ ng_net_ipv6_mode }}
+set ipv6_dns_server={{ ng_net_ipv6_dns_server }} 
+set ipv6_dns_search={{ ng_net_ipv6_dns_search }}
+commit

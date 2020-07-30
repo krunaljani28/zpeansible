@@ -1,0 +1,26 @@
+---
+ - name: Nodegrid IP change
+   hosts: 192.168.0.122
+   vars:
+    ng_net_interface: 'ETH1'
+    ng_net_description: '"Ansible test on ETH1 on 2020-03-13"'
+    ng_net_connect_automatically: 'yes'
+    ng_net_set_as_primary_connection: 'no'
+    ng_net_enable_lldp: 'yes'
+    ng_net_ipv4_mode: 'static'
+    ng_net_ipv4_address: '192.168.31.5'
+    ng_net_ipv4_bitmask: '24'
+    ng_net_ipv4_gateway: ''
+    ng_net_ipv4_dns_server: ''
+    ng_net_ipv4_dns_search: ''
+    ng_net_ipv6_mode: 'no_ipv6_address'
+    ng_net_ipv6_dns_server: ''
+    ng_net_ipv6_dns_search: ''     
+   tasks:
+   - name: Set Nodegrid Hostname
+     template:
+       src: templates/nodegrid_set_ipaddress.j2
+       dest: /tmp/nodegrid_set_ipaddress.cli
+
+   - name: Execute CLI command
+     command : cli -f /tmp/nodegrid_set_ipaddress.cli

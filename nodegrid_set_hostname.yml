@@ -1,0 +1,13 @@
+---
+ - name: checking nodegrid hostname
+   hosts: targets
+   vars:
+     ng_hostname: 'ngansible'
+   tasks:
+   - name: Copy hostname cli
+     template:
+       src: templates/nodegrid_set_hostname.j2
+       dest: /tmp/nodegrid_set_hostname.cli
+
+   - name: Execute CLI command
+     command : cli -f /tmp/nodegrid_set_hostname.cli

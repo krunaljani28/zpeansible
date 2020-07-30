@@ -1,0 +1,12 @@
+---
+ - name: Information about Nodegrid target
+   hosts: Nodegrid
+   gather_facts: no
+   tasks:
+   - name: Current Version
+     command : grep ^VERSION= /software
+     register: ng_version_after
+
+   - name: Print Version
+     debug:
+       msg: "Current Nodegrid version: {{ ng_version_after['stdout'] }}"
